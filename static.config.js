@@ -101,7 +101,6 @@ export default {
         });
       });
     }
-    console.log(comps);
     return {
       siteTitle: website.name,
       layout: require("babel-core").transform(website.layout, {
@@ -119,15 +118,12 @@ export default {
     // console.log(website);
     const routes = [];
     website.pages.map(page => {
-      console.log(
-        require("babel-core").transform(page.code, { presets: ["react"] }).code
-      );
       routes.push({
         path: page.slug,
         component: "src/containers/Home",
+        is404: page.slug === "404",
         getData: () => ({
           routeTitle: page.name,
-          code: page.code || "",
           reactCode: require("babel-core").transform(page.code, {
             presets: ["react"]
           }).code

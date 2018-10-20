@@ -80,7 +80,6 @@ export default ({ code, components }) => {
     components.map(comp => {
       const compRender = stringToJsx(comp.code, []);
       compsNames.push(comp.name);
-      console.log(scope);
       comps.push(props => {
         const newScope = [...scope];
         newScope.push(props);
