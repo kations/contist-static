@@ -84,6 +84,7 @@ const website = {
 };
 
 export default {
+  siteRoot: "https://contist-test.netlify.com",
   getSiteData: async () =>
     // const { website } = await axios.get(
     //   `http://192.168.2.107:5000/api/website/G6XJJsj4FMubu6AcK`
