@@ -1,10 +1,9 @@
 import { transform as _transform } from "buble";
-import assign from "core-js/fn/object/assign";
 
-export const _poly = { assign };
+export const _poly = { assign: Object.assign };
 
 const opts = {
-  objectAssign: "_poly.assign",
+  objectAssign: Object.assign,
   transforms: {
     dangerousForOf: true,
     dangerousTaggedTemplateString: true
