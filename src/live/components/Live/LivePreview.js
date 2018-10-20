@@ -1,13 +1,12 @@
-import React from 'react';
-import { LiveContext } from './LiveProvider';
-import cn from '../../utils/cn';
+import React, { Fragment } from "react";
+import { LiveContext } from "./LiveProvider";
 
 export default function LivePreview({ className, ...rest }) {
   return (
-    <div {...rest} className={cn('react-live-preview', className)}>
+    <Fragment>
       <LiveContext.Consumer>
         {({ element: Element }) => Element && <Element />}
       </LiveContext.Consumer>
-    </div>
+    </Fragment>
   );
 }

@@ -1,13 +1,12 @@
-import React from 'react';
-import { LiveContext } from './LiveProvider';
-import cn from '../../utils/cn';
+import React from "react";
+import { LiveContext } from "./LiveProvider";
 
 export default function LiveError({ className, ...rest }) {
   return (
     <LiveContext.Consumer>
       {({ error }) =>
         error ? (
-          <div {...rest} className={cn('react-live-error', className)}>
+          <div {...rest} className="react-live-error">
             {error}
           </div>
         ) : null

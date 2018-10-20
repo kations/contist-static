@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from "react";
-import { LiveProvider, LiveError, withLive } from "../live";
+import { LiveProvider, LiveError, LivePreview } from "../live";
 import styled from "styled-components";
 import { Router, Link } from "react-static";
 import Routes from "react-static-routes";
@@ -22,12 +22,6 @@ import {
   Card,
   Progress
 } from "contist-ui";
-
-const LiveComp = ({ live: { code, element: Element } }) => (
-  <Fragment>{Element && <Element />}</Fragment>
-);
-
-const LiveLive = withLive(LiveComp);
 
 export default class SubHeader extends Component {
   render() {
@@ -66,7 +60,7 @@ export default class SubHeader extends Component {
               scope={components}
               mountStylesheet={false}
             >
-              <LiveLive />
+              <LivePreview />
             </LiveProvider>
           );
         };
@@ -81,7 +75,7 @@ export default class SubHeader extends Component {
           mountStylesheet={false}
         >
           <LiveError />
-          <LiveLive />
+          <LivePreview />
         </LiveProvider>
       </Fragment>
     );
