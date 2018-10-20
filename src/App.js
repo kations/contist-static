@@ -7,6 +7,7 @@ import { DefaultTheme } from "contist-ui";
 import { Reset } from "contist-ui";
 
 import Live from "./components/Live";
+import Routes from "react-static-routes";
 
 const GlobalStyle = createGlobalStyle`
   ${Reset}
@@ -16,11 +17,11 @@ const GlobalStyle = createGlobalStyle`
 const App = () => (
   <Router>
     <SiteData
-      render={({ website }) => (
+      render={({ website, layout, components }) => (
         <ThemeProvider theme={website.theme || DefaultTheme}>
           <Fragment>
             <GlobalStyle style={website.globalStyle} />
-            <Live code={website.layout} ownComps={website.components} />
+            <Live code={layout} components={components} />
           </Fragment>
         </ThemeProvider>
       )}

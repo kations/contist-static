@@ -1,11 +1,11 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { withRouteData } from "react-static";
 
-import Live from "../components/Live";
 import Site from "../components/Site";
+import Live from "../components/Live";
 
-export default withRouteData(({ code }) => (
+export default withRouteData(({ code, reactCode }) => (
   <Site>
-    <Live code={code} />
+    <Live code={reactCode} />
   </Site>
 ));

@@ -85,28 +85,52 @@ const website = {
 
 export default {
   siteRoot: "https://contist-test.netlify.com",
-  getSiteData: async () =>
+  getSiteData: async () => {
     // const { website } = await axios.get(
     //   `http://192.168.2.107:5000/api/website/G6XJJsj4FMubu6AcK`
     // );
-    ({
+
+    const comps = [];
+    if (website.components) {
+      website.components.map(comp => {
+        comps.push({
+          name: comp.name,
+          code: require("babel-core").transform(comp.code, {
+            presets: ["react"]
+          }).code
+        });
+      });
+    }
+    console.log(comps);
+    return {
       siteTitle: website.name,
+      layout: require("babel-core").transform(website.layout, {
+        presets: ["react"]
+      }).code,
+      components: comps,
       website
-    }),
+    };
+  },
   getRoutes: async () => {
     // const { website } = await axios.get(
     //   `http://192.168.2.107:5000/api/website/G6XJJsj4FMubu6AcK`
     // );
 
-    console.log(website);
+    // console.log(website);
     const routes = [];
     website.pages.map(page => {
+      console.log(
+        require("babel-core").transform(page.code, { presets: ["react"] }).code
+      );
       routes.push({
         path: page.slug,
         component: "src/containers/Home",
         getData: () => ({
           routeTitle: page.name,
-          code: page.code || ""
+          code: page.code || "",
+          reactCode: require("babel-core").transform(page.code, {
+            presets: ["react"]
+          }).code
         })
       });
     });

@@ -1,9 +1,6 @@
-import React, { Fragment, Component } from "react";
-import { LiveProvider, LiveError, LivePreview } from "../live";
-import styled from "styled-components";
+import React, { Fragment } from "react";
 import { Router, Link } from "react-static";
 import Routes from "react-static-routes";
-
 import {
   Wrapper,
   Flex,
@@ -23,76 +20,77 @@ import {
   Progress
 } from "contist-ui";
 
-export default class SubHeader extends Component {
-  render() {
-    const { code, add, props, ownComps } = this.props;
+const stringToJsx = (code, components) =>
+  new Function(
+    "React",
+    "Fragment",
+    "Wrapper",
+    "Flex",
+    "Animate",
+    "Tilt",
+    "Fixed",
+    "Absolute",
+    "Box",
+    "Grid",
+    "Headline",
+    "Toolbar",
+    "Button",
+    "State",
+    "Overlay",
+    "Icon",
+    "Card",
+    "Progress",
+    "Router",
+    "Link",
+    "Routes",
+    ...components,
+    "props",
+    `return ${code}`
+  );
 
-    const components = {
-      Wrapper,
-      Flex,
-      Animate,
-      Tilt,
-      Fixed,
-      Absolute,
-      Box,
-      Grid,
-      Headline,
-      Fragment,
-      Toolbar,
-      Link,
-      Routes,
-      Button,
-      State,
-      Overlay,
-      Icon,
-      Card,
-      Progress,
-      props: {}
-    };
+const props = {};
+const scope = [
+  React,
+  Fragment,
+  Wrapper,
+  Flex,
+  Animate,
+  Tilt,
+  Fixed,
+  Absolute,
+  Box,
+  Grid,
+  Headline,
+  Toolbar,
+  Button,
+  State,
+  Overlay,
+  Icon,
+  Card,
+  Progress,
+  Router,
+  Link,
+  Routes
+];
 
-    if (ownComps) {
-      ownComps.map(comp => {
-        components[comp.name] = props => {
-          components.props = props;
-          return (
-            <LiveProvider
-              code={comp.code}
-              scope={components}
-              mountStylesheet={false}
-            >
-              <LivePreview />
-            </LiveProvider>
-          );
-        };
+export default ({ code, components }) => {
+  const comps = [];
+  const compsNames = [];
+  if (components) {
+    components.map(comp => {
+      const compRender = stringToJsx(comp.code, []);
+      compsNames.push(comp.name);
+      console.log(scope);
+      comps.push(props => {
+        const newScope = [...scope];
+        newScope.push(props);
+        return compRender(...newScope);
       });
-    }
-
-    return (
-      <Fragment>
-        <LiveProvider
-          code={code}
-          scope={Object.assign({}, components)}
-          mountStylesheet={false}
-        >
-          <LiveError />
-          <LivePreview />
-        </LiveProvider>
-      </Fragment>
-    );
+    });
   }
-}
 
-// import { transform } from "@babel/standalone";
-//
-// <LiveProvider
-//   code={props.code}
-//   transformCode={(input) => {
-//     try {
-//       return Babel.transform(input, { presets: ["typescript", "react"] }).code;
-//     } catch () {
-//       // todo: handle error
-//       return input;
-//     }
-//   }}
-// >
-// ...
+  const scropeWithComps = [...scope, ...comps];
+
+  const page = stringToJsx(code, compsNames);
+  return <Fragment>{page(...scropeWithComps)}</Fragment>;
+};
