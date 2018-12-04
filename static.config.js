@@ -1,6 +1,23 @@
 import React, { Component } from "react";
 import { ServerStyleSheet } from "styled-components";
 import axios from "axios";
+import { transform as _transform } from "buble";
+
+const tranformCode = code => {
+  const opts = {
+    objectAssign: "_poly.assign",
+    transforms: {
+      dangerousForOf: true,
+      dangerousTaggedTemplateString: true
+    }
+  };
+  // NOTE: Remove trailing semicolon to get an actual expression.
+  const codeTrimmed = code.trim().replace(/;$/, "");
+
+  // NOTE: Workaround for classes and arrow functions.
+
+  return _transform(`(${codeTrimmed})`, opts).code;
+};
 
 var babel = require("babel-core");
 
@@ -99,13 +116,13 @@ export default {
       website.components.map(comp => {
         comps.push({
           name: comp.name,
-          code: comp.code.replace("\n ", "")
+          code: tranformCode(comp.code)
         });
       });
     }
     return {
       siteTitle: website.name,
-      layout: website.layout.replace("\n ", ""),
+      layout: tranformCode(website.layout),
       components: comps,
       website
     };
@@ -124,7 +141,7 @@ export default {
         is404: page.slug === "404",
         getData: () => ({
           routeTitle: page.name,
-          reactCode: page.code.replace("\n ", "")
+          reactCode: tranformCode(page.code)
         })
       });
     });

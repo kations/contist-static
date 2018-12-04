@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { generateElement, renderElementAsync } from "../../utils/transpile";
 
 export const LiveContext = React.createContext("live");
@@ -9,15 +8,6 @@ export default class LiveProvider extends Component {
     code: "",
     mountStylesheet: true,
     noInline: false
-  };
-
-  static propTypes = {
-    className: PropTypes.string,
-    code: PropTypes.string,
-    scope: PropTypes.object,
-    mountStylesheet: PropTypes.bool,
-    noInline: PropTypes.bool,
-    transformCode: PropTypes.func
   };
 
   onChange = code => {

@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
-var safeEval = require("safe-eval");
 
 import { Router, Link } from "react-static";
 import Routes from "react-static-routes";
@@ -84,7 +83,6 @@ export default ({ code, components }) => {
     components.map(comp => {
       comps[comp.name] = props => {
         const scopeWithProps = Object.assign({}, scope, { props: props });
-        console.log("scopeWithProps", scopeWithProps, comp.code);
         return (
           <LiveProvider code={comp.code} scope={scopeWithProps}>
             <LiveError />
@@ -94,7 +92,6 @@ export default ({ code, components }) => {
       };
     });
   }
-  //console.log(code, scropeWithComps);
   const scropeWithComps = { ...scope, ...comps };
   return (
     <LiveProvider code={code} scope={scropeWithComps}>
