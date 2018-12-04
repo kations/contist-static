@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { ServerStyleSheet } from "styled-components";
 import axios from "axios";
 
+var babel = require("babel-core");
+
 const website = {
   _id: "G6XJJsj4FMubu6AcK",
   name: "Contist test",
@@ -25,7 +27,7 @@ const website = {
       slug: "/",
       description: "test",
       code:
-        '<Fragment>\n  <State\n    initialState={{\n      show: false,\n      position: undefined,\n      full: false,\n      from: undefined,\n      fullHeight: false\n    }}\n  >\n    {({ state, setState }) => (\n      <Fragment>\n        <Headline as="h3" marginBottom={50} animated>\n          Overlay\n        </Headline>\n        <Grid gap="10px">\n          <Button\n            onClick={() =>\n              setState({\n                show: !state.show,\n                position: "center",\n                full: false,\n                from: undefined,\n                fullHeight: false\n              })\n            }\n          >\n            Show Overlay\n          </Button>\n          <Button\n            onClick={() =>\n              setState({\n                show: !state.show,\n                position: "center",\n                fullHeight: false,\n                full: false,\n                from: { transform: "translate3d(0, 0, 0) scale(0)", opacity: 0 }\n              })\n            }\n          >\n            Change Animation\n          </Button>\n          <Button\n            onClick={() =>\n              setState({\n                show: !state.show,\n                position: "left",\n                full: false,\n                fullHeight: true,\n                from: { transform: "translate3d(-300px, 0, 0)" }\n              })\n            }\n          >\n            As sidebar\n          </Button>\n          <Button\n            onClick={() =>\n              setState({\n                show: !state.show,\n                position: "center",\n                full: true,\n                fullHeight: false,\n                from: undefined\n              })\n            }\n          >\n            Full Overlay\n          </Button>\n        </Grid>\n        <Overlay\n          visible={state.show}\n          full={state.full}\n          position={state.position}\n          from={state.from}\n          fullHeight={state.fullHeight}\n          handleClose={() => setState({ show: !state.show })}\n        >\n          <Button onClick={() => setState({ show: !state.show })}>Close</Button>\n        </Overlay>\n      </Fragment>\n    )}\n  </State>\n</Fragment>\n'
+        '() => { return <Fragment>\n  <State\n    initialState={{\n      show: false,\n      position: undefined,\n      full: false,\n      from: undefined,\n      fullHeight: false\n    }}\n  >\n    {({ state, setState }) => (\n      <Fragment>\n        <Headline as="h3" marginBottom={50} animated>\n          Overlay\n        </Headline>\n        <Grid gap="10px">\n          <Button\n            onClick={() =>\n              setState({\n                show: !state.show,\n                position: "center",\n                full: false,\n                from: undefined,\n                fullHeight: false\n              })\n            }\n          >\n            Show Overlay\n          </Button>\n          <Button\n            onClick={() =>\n              setState({\n                show: !state.show,\n                position: "center",\n                fullHeight: false,\n                full: false,\n                from: { transform: "translate3d(0, 0, 0) scale(0)", opacity: 0 }\n              })\n            }\n          >\n            Change Animation\n          </Button>\n          <Button\n            onClick={() =>\n              setState({\n                show: !state.show,\n                position: "left",\n                full: false,\n                fullHeight: true,\n                from: { transform: "translate3d(-300px, 0, 0)" }\n              })\n            }\n          >\n            As sidebar\n          </Button>\n          <Button\n            onClick={() =>\n              setState({\n                show: !state.show,\n                position: "center",\n                full: true,\n                fullHeight: false,\n                from: undefined\n              })\n            }\n          >\n            Full Overlay\n          </Button>\n        </Grid>\n        <Overlay\n          visible={state.show}\n          full={state.full}\n          position={state.position}\n          from={state.from}\n          fullHeight={state.fullHeight}\n          handleClose={() => setState({ show: !state.show })}\n        >\n          <Button onClick={() => setState({ show: !state.show })}>Close</Button>\n        </Overlay>\n      </Fragment>\n    )}\n  </State>\n</Fragment>\n}'
     },
     {
       name: "Shop",
@@ -76,12 +78,14 @@ const website = {
     },
     {
       name: "Footer",
-      code: '<Toolbar>{props.test || "hi"}</Toolbar>\n'
+      code: '() => (<Toolbar>{props.test || "hi"}</Toolbar>)\n'
     }
   ],
   layout:
-    '<Fragment>\n  <Header />\n  <main>\n    <Routes />\n  </main>\n  <Footer test="nfnsfsnsngs" />\n</Fragment>'
+    '() => { return <Fragment>\n  <Header />\n  <main>\n <Routes /> </main>\n  <Footer test="nfnsfsnsngs" />\n</Fragment>}'
 };
+
+//<Routes />\n
 
 export default {
   siteRoot: "https://contist-test.netlify.com",
@@ -95,17 +99,13 @@ export default {
       website.components.map(comp => {
         comps.push({
           name: comp.name,
-          code: require("babel-core").transform(comp.code, {
-            presets: ["react"]
-          }).code
+          code: comp.code.replace("\n ", "")
         });
       });
     }
     return {
       siteTitle: website.name,
-      layout: require("babel-core").transform(website.layout, {
-        presets: ["react"]
-      }).code,
+      layout: website.layout.replace("\n ", ""),
       components: comps,
       website
     };
@@ -124,9 +124,7 @@ export default {
         is404: page.slug === "404",
         getData: () => ({
           routeTitle: page.name,
-          reactCode: require("babel-core").transform(page.code, {
-            presets: ["react"]
-          }).code
+          reactCode: page.code.replace("\n ", "")
         })
       });
     });
